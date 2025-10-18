@@ -13,7 +13,7 @@ npm install
 
 Conecta a tu base de datos:
 ```bash
-psql 'postgresql://neondb_owner:npg_b15YLKcRTEIi@ep-square-union-adc0vqwj-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+psql 'postgresql://TU_USUARIO:TU_PASSWORD@TU_HOST.neon.tech/TU_DATABASE?sslmode=require'
 ```
 
 Ejecuta los archivos de migración:
@@ -54,7 +54,7 @@ Ejecuta los archivos de migración:
 Crea un archivo `.env` en la raíz del proyecto:
 
 ```env
-VITE_DATABASE_URL=postgresql://neondb_owner:npg_b15YLKcRTEIi@ep-square-union-adc0vqwj-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+VITE_DATABASE_URL=postgresql://TU_USUARIO:TU_PASSWORD@TU_HOST.neon.tech/TU_DATABASE?sslmode=require
 
 VITE_GOOGLE_CLIENT_ID=PEGA_AQUI_TU_CLIENT_ID
 ```

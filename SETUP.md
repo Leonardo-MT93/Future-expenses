@@ -32,7 +32,7 @@ npm install
 
 ```bash
 # Conectar a Neon
-psql 'postgresql://neondb_owner:npg_b15YLKcRTEIi@ep-square-union-adc0vqwj-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+psql 'postgresql://TU_USUARIO:TU_PASSWORD@TU_HOST.neon.tech/TU_DATABASE?sslmode=require'
 
 # Una vez conectado, ejecuta:
 \i supabase/migrations/00_run_all_migrations.sql
@@ -107,7 +107,7 @@ Crea un archivo `.env` en la raíz del proyecto (mismo nivel que `package.json`)
 
 ```env
 # Neon PostgreSQL Database
-VITE_DATABASE_URL=postgresql://neondb_owner:npg_b15YLKcRTEIi@ep-square-union-adc0vqwj-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+VITE_DATABASE_URL=postgresql://TU_USUARIO:TU_PASSWORD@TU_HOST.neon.tech/TU_DATABASE?sslmode=require
 
 # Google OAuth - PEGA TU CLIENT ID AQUÍ
 VITE_GOOGLE_CLIENT_ID=TU_CLIENT_ID_DE_GOOGLE_AQUI
