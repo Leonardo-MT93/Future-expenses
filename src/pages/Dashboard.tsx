@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Plus, CreditCard, ArrowRight, LogOut, User } from 'lucide-react';
+import { CreditCard, ArrowRight, LogOut, User } from 'lucide-react';
 import { calcularTotalProximoMes, formatearMonto, obtenerProximoMes, obtenerMesActual } from '../utils/gastos';
 import { obtenerTarjetas, diasHastaVencimientoTarjeta, obtenerProximoCierre, obtenerProximoVencimiento } from '../utils/tarjetas';
 import { Tarjeta } from '../lib/db';
 import { useAuth } from '../contexts/AuthContext';
 
 type DashboardProps = {
-  onAddGasto: () => void;
   onNavigateToTarjetas: () => void;
   refreshTrigger: number;
 };
 
-export function Dashboard({ onAddGasto, onNavigateToTarjetas, refreshTrigger }: DashboardProps) {
+export function Dashboard({ onNavigateToTarjetas, refreshTrigger }: DashboardProps) {
   const { user, logout } = useAuth();
   const [totalARS, setTotalARS] = useState(0);
   const [totalUSD, setTotalUSD] = useState(0);
@@ -165,14 +164,6 @@ export function Dashboard({ onAddGasto, onNavigateToTarjetas, refreshTrigger }: 
             </div>
           )}
         </div>
-
-        <button
-          onClick={onAddGasto}
-          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 z-30"
-          title="Agregar gasto"
-        >
-          <Plus className="w-7 h-7 sm:w-8 sm:h-8" />
-        </button>
       </div>
     </div>
   );

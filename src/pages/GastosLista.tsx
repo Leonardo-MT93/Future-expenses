@@ -37,7 +37,18 @@ export function GastosLista({ moneda, onAddGasto, onEditGasto, onDeleteGasto, re
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">{titulo}</h1>
+        <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white truncate">{titulo}</h1>
+          <button
+            onClick={onAddGasto}
+            className="px-3 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors inline-flex items-center gap-2 text-sm sm:text-base flex-shrink-0"
+            title="Agregar gasto"
+          >
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline">Agregar Gasto</span>
+            <span className="sm:hidden">Agregar</span>
+          </button>
+        </div>
 
         <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-md p-3 sm:p-4 mb-4 sm:mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
@@ -111,14 +122,6 @@ export function GastosLista({ moneda, onAddGasto, onEditGasto, onDeleteGasto, re
             ))}
           </div>
         )}
-
-        <button
-          onClick={onAddGasto}
-          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 z-30"
-          title="Agregar gasto"
-        >
-          <Plus className="w-7 h-7 sm:w-8 sm:h-8" />
-        </button>
       </div>
     </div>
   );

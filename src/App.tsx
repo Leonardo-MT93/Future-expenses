@@ -127,7 +127,6 @@ function App() {
       <main>
         {activeTab === 'home' && (
           <Dashboard
-            onAddGasto={handleAddGasto}
             onNavigateToTarjetas={() => setActiveTab('tarjetas')}
             refreshTrigger={refreshTrigger}
           />
