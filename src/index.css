@@ -31,3 +31,62 @@
 .animate-scale-in {
   animation: scale-in 0.2s ease-out;
 }
+
+/* React Colorful Styles */
+.react-colorful {
+  width: 100%;
+  height: 200px;
+}
+
+.react-colorful__saturation {
+  border-radius: 8px 8px 0 0;
+  border-bottom: none;
+}
+
+.react-colorful__hue {
+  height: 32px;
+  border-radius: 0 0 8px 8px;
+}
+
+.react-colorful__pointer {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.react-colorful__hue-pointer {
+  width: 24px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+/* Estilos para el input de color nativo */
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 8px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 8px;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: 8px;
+}
+
+input[type="color"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

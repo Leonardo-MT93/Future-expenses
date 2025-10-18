@@ -43,7 +43,9 @@ export type Tarjeta = {
   id: string;
   nombre: string;
   dia_cierre: number;
+  mes_cierre: number;
   dia_vencimiento: number;
+  mes_vencimiento: number;
   color: string;
   fecha_creacion: string;
   fecha_modificacion: string;

@@ -1,19 +1,5 @@
 import { sql, Tarjeta } from '../lib/db';
 
-export const GRADIENTES_TARJETAS = [
-  { value: 'gradient-1', label: 'Azul', colors: 'from-blue-500 to-blue-700' },
-  { value: 'gradient-2', label: 'Verde', colors: 'from-green-500 to-green-700' },
-  { value: 'gradient-3', label: 'Púrpura', colors: 'from-purple-500 to-purple-700' },
-  { value: 'gradient-4', label: 'Naranja', colors: 'from-orange-500 to-orange-700' },
-  { value: 'gradient-5', label: 'Rosa', colors: 'from-pink-500 to-pink-700' },
-  { value: 'gradient-6', label: 'Gris', colors: 'from-gray-600 to-gray-800' },
-];
-
-export function obtenerGradiente(colorId: string): string {
-  const gradiente = GRADIENTES_TARJETAS.find(g => g.value === colorId);
-  return gradiente?.colors || GRADIENTES_TARJETAS[0].colors;
-}
-
 export function calcularMesPagoConTarjeta(tarjeta: Tarjeta, fechaCompra: Date = new Date()): string {
   const diaActual = fechaCompra.getDate();
   const mesActual = fechaCompra.getMonth();
@@ -45,19 +31,55 @@ export function obtenerNombreMesPago(tarjeta: Tarjeta, fechaCompra: Date = new D
   return `${meses[parseInt(mes) - 1]} ${año}`;
 }
 
-export function diasHastaVencimientoTarjeta(tarjeta: Tarjeta): number {
+export function obtenerProximoCierre(tarjeta: Tarjeta): { fecha: Date; dia: number; mes: number } {
   const hoy = new Date();
-  const diaActual = hoy.getDate();
-  const mesActual = hoy.getMonth();
+  hoy.setHours(0, 0, 0, 0);
   const añoActual = hoy.getFullYear();
+  
+  // Crear fecha de cierre usando el mes y día específicos de la tarjeta
+  let fechaCierre = new Date(añoActual, tarjeta.mes_cierre - 1, tarjeta.dia_cierre);
+  fechaCierre.setHours(0, 0, 0, 0);
 
-  let vencimiento = new Date(añoActual, mesActual, tarjeta.dia_vencimiento);
-
-  if (diaActual > tarjeta.dia_vencimiento) {
-    vencimiento = new Date(añoActual, mesActual + 1, tarjeta.dia_vencimiento);
+  // Si ya pasó la fecha de cierre este año, usar el año siguiente
+  if (fechaCierre < hoy) {
+    fechaCierre = new Date(añoActual + 1, tarjeta.mes_cierre - 1, tarjeta.dia_cierre);
   }
 
-  const diferencia = vencimiento.getTime() - hoy.getTime();
+  return {
+    fecha: fechaCierre,
+    dia: fechaCierre.getDate(),
+    mes: fechaCierre.getMonth() + 1
+  };
+}
+
+export function obtenerProximoVencimiento(tarjeta: Tarjeta): { fecha: Date; dia: number; mes: number } {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  const añoActual = hoy.getFullYear();
+  
+  // Crear fecha de vencimiento usando el mes y día específicos de la tarjeta
+  let fechaVencimiento = new Date(añoActual, tarjeta.mes_vencimiento - 1, tarjeta.dia_vencimiento);
+  fechaVencimiento.setHours(0, 0, 0, 0);
+
+  // Si ya pasó la fecha de vencimiento este año, usar el año siguiente
+  if (fechaVencimiento < hoy) {
+    fechaVencimiento = new Date(añoActual + 1, tarjeta.mes_vencimiento - 1, tarjeta.dia_vencimiento);
+  }
+
+  return {
+    fecha: fechaVencimiento,
+    dia: fechaVencimiento.getDate(),
+    mes: fechaVencimiento.getMonth() + 1
+  };
+}
+
+export function diasHastaVencimientoTarjeta(tarjeta: Tarjeta): number {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  
+  const proximoVencimiento = obtenerProximoVencimiento(tarjeta);
+  
+  const diferencia = proximoVencimiento.fecha.getTime() - hoy.getTime();
   return Math.ceil(diferencia / (1000 * 60 * 60 * 24));
 }
 
@@ -112,8 +134,8 @@ export async function obtenerTarjetaPorId(id: string): Promise<Tarjeta | null> {
 export async function agregarTarjeta(userId: string, tarjeta: Omit<Tarjeta, 'id' | 'fecha_creacion' | 'fecha_modificacion' | 'user_id'>): Promise<Tarjeta | null> {
   try {
     const result = await sql`
-      INSERT INTO tarjetas (nombre, dia_cierre, dia_vencimiento, color, user_id)
-      VALUES (${tarjeta.nombre}, ${tarjeta.dia_cierre}, ${tarjeta.dia_vencimiento}, ${tarjeta.color}, ${userId})
+      INSERT INTO tarjetas (nombre, dia_cierre, mes_cierre, dia_vencimiento, mes_vencimiento, color, user_id)
+      VALUES (${tarjeta.nombre}, ${tarjeta.dia_cierre}, ${tarjeta.mes_cierre}, ${tarjeta.dia_vencimiento}, ${tarjeta.mes_vencimiento}, ${tarjeta.color}, ${userId})
       RETURNING *
     `;
     return result[0] as Tarjeta;
@@ -130,7 +152,9 @@ export async function editarTarjeta(id: string, tarjetaActualizada: Partial<Tarj
       SET 
         nombre = COALESCE(${tarjetaActualizada.nombre || null}, nombre),
         dia_cierre = COALESCE(${tarjetaActualizada.dia_cierre || null}, dia_cierre),
+        mes_cierre = COALESCE(${tarjetaActualizada.mes_cierre || null}, mes_cierre),
         dia_vencimiento = COALESCE(${tarjetaActualizada.dia_vencimiento || null}, dia_vencimiento),
+        mes_vencimiento = COALESCE(${tarjetaActualizada.mes_vencimiento || null}, mes_vencimiento),
         color = COALESCE(${tarjetaActualizada.color || null}, color),
         fecha_modificacion = NOW()
       WHERE id = ${id}

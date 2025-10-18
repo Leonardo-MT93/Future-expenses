@@ -100,22 +100,23 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900">
       <nav className="bg-gray-800 shadow-lg sticky top-0 z-40 border-b border-gray-700">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex space-x-1 overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4">
+          <div className="flex justify-around sm:justify-start sm:space-x-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-4 font-medium transition-colors whitespace-nowrap ${
+                  className={`flex items-center justify-center gap-2 px-3 sm:px-6 py-4 font-medium transition-colors ${
                     activeTab === tab.id
                       ? 'text-blue-400 border-b-2 border-blue-400'
                       : 'text-gray-400 hover:text-gray-200'
                   }`}
+                  title={tab.label}
                 >
-                  <Icon className="w-5 h-5" />
-                  {tab.label}
+                  <Icon className="w-5 h-5 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline text-sm md:text-base">{tab.label}</span>
                 </button>
               );
             })}

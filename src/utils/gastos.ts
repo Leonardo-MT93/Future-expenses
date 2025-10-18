@@ -2,12 +2,12 @@ import { sql, Gasto } from '../lib/db';
 import { useAuth } from '../contexts/AuthContext';
 
 export const CATEGORIAS = [
-  { value: 'Hogar', label: 'Hogar', color: 'blue-500' },
-  { value: 'Suscripciones', label: 'Suscripciones', color: 'purple-500' },
-  { value: 'Compras', label: 'Compras', color: 'green-500' },
-  { value: 'Servicios', label: 'Servicios', color: 'orange-500' },
-  { value: 'Entretenimiento', label: 'Entretenimiento', color: 'pink-500' },
-  { value: 'Otros', label: 'Otros', color: 'gray-500' },
+  { value: 'Hogar', label: 'Hogar', color: 'blue-500', icon: 'Home' },
+  { value: 'Suscripciones', label: 'Suscripciones', color: 'purple-500', icon: 'Calendar' },
+  { value: 'Compras', label: 'Compras', color: 'green-500', icon: 'ShoppingBag' },
+  { value: 'Servicios', label: 'Servicios', color: 'orange-500', icon: 'Wrench' },
+  { value: 'Entretenimiento', label: 'Entretenimiento', color: 'pink-500', icon: 'Film' },
+  { value: 'Otros', label: 'Otros', color: 'gray-500', icon: 'MoreHorizontal' },
 ];
 
 export const TIPOS_GASTO = [
@@ -48,26 +48,40 @@ export function obtenerMesActual(): { mes: string, año: number, mesNumero: numb
 }
 
 export function formatearMonto(monto: number, moneda: 'ARS' | 'USD'): string {
-  const montoFormateado = new Intl.NumberFormat('es-AR').format(monto);
+  const montoNumerico = Number(monto);
+  const montoFormateado = new Intl.NumberFormat('es-AR', { 
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2 
+  }).format(montoNumerico);
   return moneda === 'ARS' ? `$${montoFormateado}` : `USD ${montoFormateado}`;
 }
 
 export function calcularMontoCuota(gasto: Gasto): number {
+  const monto = Number(gasto.monto);
   if (gasto.tipo === 'cuotas' && gasto.cuotas_total && gasto.cuotas_total > 0) {
-    return gasto.monto / gasto.cuotas_total;
+    return monto / Number(gasto.cuotas_total);
   }
-  return gasto.monto;
+  return monto;
 }
 
 export function esPagoEnProximoMes(gasto: Gasto): boolean {
+  const hoy = new Date();
+  const proximoMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 1);
+  const mesProximo = (proximoMes.getMonth() + 1).toString().padStart(2, '0');
+  const añoProximo = proximoMes.getFullYear().toString();
+
+  // Gastos recurrentes: solo si están activos
   if (gasto.tipo === 'recurrente') {
     return gasto.activo === true;
   }
 
-  if (gasto.tipo === 'unico') {
-    return true;
+  // Gastos únicos: solo si el mes de pago es el próximo mes
+  if (gasto.tipo === 'unico' && gasto.mes_pago) {
+    const [mesPago, añoPago] = gasto.mes_pago.split('/');
+    return mesPago === mesProximo && añoPago === añoProximo;
   }
 
+  // Gastos en cuotas: solo si aún hay cuotas pendientes
   if (gasto.tipo === 'cuotas' && gasto.cuota_actual && gasto.cuotas_total) {
     return gasto.cuota_actual <= gasto.cuotas_total;
   }
@@ -121,7 +135,13 @@ export async function obtenerGastos(userId: string, moneda?: 'ARS' | 'USD'): Pro
       `;
     }
 
-    return gastos as Gasto[];
+    // Asegurar que los valores numéricos sean números, no strings
+    return gastos.map(gasto => ({
+      ...gasto,
+      monto: Number(gasto.monto),
+      cuota_actual: gasto.cuota_actual ? Number(gasto.cuota_actual) : undefined,
+      cuotas_total: gasto.cuotas_total ? Number(gasto.cuotas_total) : undefined,
+    })) as Gasto[];
   } catch (error) {
     console.error('Error al obtener gastos:', error);
     return [];
@@ -223,5 +243,5 @@ export async function calcularTotalProximoMes(userId: string, moneda: 'ARS' | 'U
   const gastos = await obtenerGastos(userId, moneda);
   return gastos
     .filter(gasto => esPagoEnProximoMes(gasto))
-    .reduce((total, gasto) => total + calcularMontoCuota(gasto), 0);
+    .reduce((total, gasto) => Number(total) + Number(calcularMontoCuota(gasto)), 0);
 }

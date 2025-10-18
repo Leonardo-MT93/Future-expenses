@@ -159,30 +159,31 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
-        <div className="sticky top-0 bg-gray-800 border-b border-gray-700 border-gray-700 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-white">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-scale-in">
+        <div className="sticky top-0 bg-gray-800 border-b border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <h2 className="text-xl sm:text-2xl font-bold text-white">
             {gasto ? 'Editar Gasto' : 'Nuevo Gasto'}
           </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-400 transition-colors"
+            title="Cerrar"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Moneda
             </label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setMoneda('ARS')}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                className={`flex-1 py-2 px-3 sm:px-4 text-sm sm:text-base rounded-lg font-medium transition-colors ${
                   moneda === 'ARS'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -193,7 +194,7 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
               <button
                 type="button"
                 onClick={() => setMoneda('USD')}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                className={`flex-1 py-2 px-3 sm:px-4 text-sm sm:text-base rounded-lg font-medium transition-colors ${
                   moneda === 'USD'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -205,7 +206,7 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Descripción
             </label>
             <input
@@ -213,15 +214,15 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
               placeholder="Ej: Netflix, Cuota Auto, Alquiler"
-              className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {errors.descripcion && (
-              <p className="text-red-500 text-sm mt-1">{errors.descripcion}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.descripcion}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Monto ({moneda === 'ARS' ? '$' : 'USD'})
             </label>
             <input
@@ -230,21 +231,21 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
               onChange={(e) => setMonto(e.target.value)}
               placeholder="0.00"
               step="0.01"
-              className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {errors.monto && (
-              <p className="text-red-500 text-sm mt-1">{errors.monto}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.monto}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Categoría
             </label>
             <select
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {CATEGORIAS.map((cat) => (
                 <option key={cat.value} value={cat.value}>
@@ -255,13 +256,13 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Tipo de Gasto
             </label>
             <select
               value={tipo}
               onChange={(e) => setTipo(e.target.value as 'unico' | 'cuotas' | 'recurrente')}
-              className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {TIPOS_GASTO.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -273,13 +274,13 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
 
           {tipo === 'unico' && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                 Mes de Pago
               </label>
               <select
                 value={mesPago}
                 onChange={(e) => setMesPago(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {generarOpcionesMeses().map((opcion) => (
                   <option key={opcion.value} value={opcion.value}>
@@ -288,20 +289,20 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
                 ))}
               </select>
               {errors.mesPago && (
-                <p className="text-red-500 text-sm mt-1">{errors.mesPago}</p>
+                <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.mesPago}</p>
               )}
             </div>
           )}
 
           {(tipo === 'cuotas' || tipo === 'recurrente') && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                 Tarjeta de Crédito {tipo === 'cuotas' && <span className="text-red-500">*</span>}
               </label>
               <select
                 value={tarjetaId}
                 onChange={(e) => setTarjetaId(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Selecciona una tarjeta</option>
                 {tarjetas.map((tarjeta) => (
@@ -311,10 +312,10 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
                 ))}
               </select>
               {errors.tarjetaId && (
-                <p className="text-red-500 text-sm mt-1">{errors.tarjetaId}</p>
+                <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.tarjetaId}</p>
               )}
               {tarjetas.length === 0 && (
-                <p className="text-yellow-500 text-sm mt-1">
+                <p className="text-yellow-500 text-xs sm:text-sm mt-1">
                   No tienes tarjetas registradas. Agrega una desde la sección Tarjetas.
                 </p>
               )}
@@ -323,9 +324,9 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
 
           {tipo === 'cuotas' && (
             <>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                     Cuota Actual
                   </label>
                   <input
@@ -333,15 +334,15 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
                     value={cuotaActual}
                     onChange={(e) => setCuotaActual(e.target.value)}
                     placeholder="3"
-                    className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   {errors.cuotaActual && (
-                    <p className="text-red-500 text-sm mt-1">{errors.cuotaActual}</p>
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.cuotaActual}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                     Total de Cuotas
                   </label>
                   <input
@@ -349,22 +350,22 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
                     value={cuotasTotal}
                     onChange={(e) => setCuotasTotal(e.target.value)}
                     placeholder="12"
-                    className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   {errors.cuotasTotal && (
-                    <p className="text-red-500 text-sm mt-1">{errors.cuotasTotal}</p>
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.cuotasTotal}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
                   Mes de Primera Cuota
                 </label>
                 <select
                   value={mesInicio}
                   onChange={(e) => setMesInicio(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {generarOpcionesMeses().map((opcion) => (
                     <option key={opcion.value} value={opcion.value}>
@@ -373,7 +374,7 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
                   ))}
                 </select>
                 {errors.mesInicio && (
-                  <p className="text-red-500 text-sm mt-1">{errors.mesInicio}</p>
+                  <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.mesInicio}</p>
                 )}
               </div>
             </>
@@ -386,35 +387,35 @@ export function GastoModal({ isOpen, gasto, onClose, onSave, onDelete }: GastoMo
                   type="checkbox"
                   checked={activo}
                   onChange={(e) => setActivo(e.target.checked)}
-                  className="w-5 h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500"
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500"
                 />
-                <span className="text-sm font-medium text-gray-300">Activo</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-300">Activo</span>
               </label>
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="text-xs sm:text-sm text-gray-400 mt-2">
                 Se cobrará todos los meses hasta desactivar
               </p>
             </div>
           )}
         </div>
 
-        <div className="sticky bottom-0 bg-gray-900 px-6 py-4 flex gap-3 justify-end border-t border-gray-700">
+        <div className="sticky bottom-0 bg-gray-900 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end border-t border-gray-700">
           {gasto && onDelete && (
             <button
               onClick={() => onDelete(gasto.id)}
-              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+              className="w-full sm:w-auto px-4 sm:px-6 py-2 text-sm sm:text-base bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium order-3 sm:order-1"
             >
               Eliminar
             </button>
           )}
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+            className="w-full sm:w-auto px-4 sm:px-6 py-2 text-sm sm:text-base bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium order-2"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
+            className="w-full sm:w-auto px-4 sm:px-6 py-2 text-sm sm:text-base bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium order-1 sm:order-3"
           >
             Guardar
           </button>
